@@ -1,0 +1,17 @@
+{
+    "foodId": "chicken_salad",
+    "user": "65dce1446412b89a9ce828b2",
+    "foodName": "Chicken Salad",
+    "isCompound": true,
+    "ingredients": [
+      { "name": "Chicken Breast", "quantity": 200, "measurementType": "grams" },
+      { "name": "Lettuce", "quantity": 100, "measurementType": "grams" },
+      { "name": "Tomatoes", "quantity": 50, "measurementType": "grams" },
+      { "name": "Cucumber", "quantity": 50, "measurementType": "grams" }
+    ],
+    "quantity": 1,
+    "measurementType": "serving",
+    "calories": 250,
+    "protein": 30
+  }
+  
