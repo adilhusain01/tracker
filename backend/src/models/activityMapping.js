@@ -10,9 +10,9 @@ const activityMappingSchema = new mongoose.Schema({
     type: Date,
     required: true
   },
-  activityTemplate: {
+  activity: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'ActivityTemplate', // Reference to the ActivityTemplate model
+    ref: 'Activity', // Reference to the ActivityTemplate model
     required: true
   },
   isCompleted: {

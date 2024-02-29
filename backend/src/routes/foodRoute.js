@@ -3,7 +3,7 @@ const router = express.Router();
 const foodController = require('../controllers/foodController');
 const foodMappingController = require('../controllers/foodMappingController');
 
-router.post('/add', foodController.addFoodEntry);
+router.post('/', foodController.addFoodEntry);
 router.delete('/:foodId', foodController.deleteFoodEntry);
 router.put('/:foodId', foodController.updateFoodEntry);
 router.get('/:foodId', foodController.getFoodEntryById);

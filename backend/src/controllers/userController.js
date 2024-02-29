@@ -1,6 +1,8 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
+const ActivityMapping = require('../models/activityMapping');
+const FoodMapping = require('../models/foodMapping');
 const dotenv = require("dotenv");
 dotenv.config();
 
@@ -17,8 +19,6 @@ exports.registerUser = async (req, res) => {
     res.status(500).json({ message: 'Server Error' });
   }
 };
-
-
 
 // Controller function to get user details
 exports.getUserDetails = async (req, res) => {
@@ -88,33 +88,37 @@ exports.login = async (req, res) => {
   }
 };
 
-
 exports.dashboard = async (req, res) => {
   try {
-      // Get the user ID from the authenticated request
-      const userId = req.user.id;
+    // Get the user ID from the authenticated request
+    const userId = req.user.id;
 
-      // Retrieve user-specific data from the database based on the user ID
-      const user = await User.findById(userId);
+    // Retrieve user-specific data from the database based on the user ID
+    const user = await User.findById(userId);
+    
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
 
-      if (!user) {
-          return res.status(404).json({ message: 'User not found' });
-      }
+    // Retrieve tasks and activities associated with the user
+    const foodMapping = await FoodMapping.find({ user: userId }).populate('food');
+    const activityMapping = await ActivityMapping.find({ user: userId }).populate('activity');
 
-      // You can customize the response data based on your application requirements
-      const userData = {
-          id: user._id,
-          username: user.username,
-          email: user.email,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          dateOfBirth: user.dateOfBirth,
-          createdAt: user.createdAt
-          // Add more fields as needed
-      };
+    // Combine user information with tasks and activities data
+    const userData = {
+      id: user._id,
+      username: user.username,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      dateOfBirth: user.dateOfBirth,
+      createdAt: user.createdAt,
+      foodMap: foodMapping,
+      activityMap: activityMapping
+    };
 
-      res.status(200).json(userData);
+    res.status(200).json(userData);
   } catch (error) {
-      res.status(500).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
-}
+};

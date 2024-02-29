@@ -3,10 +3,10 @@ const ActivityMapping = require('../models/activityMapping');
 // Controller function to add a new activity mapping
 exports.addActivityMapping = async (req, res) => {
     try {
-      const { user, date, activityTemplateId } = req.body;
+      const { user, date, activityId, isCompleted } = req.body;
   
       // Create the activity mapping
-      const newActivityMapping = new ActivityMapping({ user, date, activityTemplate: activityTemplateId });
+      const newActivityMapping = new ActivityMapping({ user, date, activity: activityId, isCompleted });
       await newActivityMapping.save();
   
       res.status(201).json(newActivityMapping);
@@ -20,7 +20,7 @@ exports.addActivityMapping = async (req, res) => {
   exports.getActivityMappings = async (req, res) => {
     try {
       const userId = req.params.userId;
-      const activityMappings = await ActivityMapping.find({ user: userId }).populate('activityTemplate');
+      const activityMappings = await ActivityMapping.find({ user: userId }).populate('activity');
       res.status(200).json(activityMappings);
     } catch (error) {
       console.error(error);
@@ -31,7 +31,8 @@ exports.addActivityMapping = async (req, res) => {
   // Controller function to mark activity as completed for a specific date
   exports.markActivityAsCompleted = async (req, res) => {
     try {
-      const { activityMappingId, isCompleted } = req.body;
+      const { isCompleted } = req.body;
+      const { activityMappingId } = req.params;
       const updatedActivityMapping = await ActivityMapping.findByIdAndUpdate(activityMappingId, { isCompleted: isCompleted }, { new: true });
       res.status(200).json(updatedActivityMapping);
     } catch (error) {
@@ -40,7 +41,7 @@ exports.addActivityMapping = async (req, res) => {
     }
   };
   
-  // Controller function to delete an activity mapping
+  //Controller function to delete an activity mapping
   exports.deleteActivityMapping = async (req, res) => {
     try {
       const activityMappingId = req.params.activityMappingId;
@@ -51,4 +52,3 @@ exports.addActivityMapping = async (req, res) => {
       res.status(500).json({ message: 'Server Error' });
     }
   };
-  

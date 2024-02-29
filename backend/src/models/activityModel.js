@@ -1,13 +1,18 @@
 const mongoose = require('mongoose');
 
-const activityTemplateSchema = new mongoose.Schema({
+const activitySchema = new mongoose.Schema({
   name: {
     type: String,
     required: true
   },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User', // Reference to the User model
+    required: true
+  }
   // Add any other fields you need for the activity template
 });
 
-const ActivityTemplate = mongoose.model('ActivityTemplate', activityTemplateSchema);
+const Activity = mongoose.model('Activity', activitySchema);
 
-module.exports = ActivityTemplate;
+module.exports = Activity;
